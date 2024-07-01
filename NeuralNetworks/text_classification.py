@@ -7,7 +7,6 @@ num_words = 88000
 
 (train_data, train_labels), (test_data, test_labels) = data.load_data(num_words=num_words)
 
-
 word_index = data.get_word_index() 
 
 word_index = {k:(v+3) for k, v in word_index.items()}
@@ -40,7 +39,10 @@ def review_encode(s):
 model = keras.models.load_model("model.h5")
 
 with open('test.txt', encoding="utf-8") as f:
+    counter = 0
     for line in f.readlines():
+        counter+=1
+        print("LINE TYPUE: ", type(line))
         nline  = line.replace(',', "").replace(".", "").replace("(", "").replace(")", "").replace(":", "").replace("\"","").strip().split(" ")
         encode = review_encode(nline)
         encode = keras.preprocessing.sequence.pad_sequences([encode], value=word_index["<PAD>"], padding="post", maxlen=250)
@@ -49,6 +51,7 @@ with open('test.txt', encoding="utf-8") as f:
         print("Encode: \n", encode)
         print("Predict: \n", predict[0])
 
+    print("COUNTER: ", counter)
 
 
 """
